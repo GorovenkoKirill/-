@@ -1,0 +1,92 @@
+﻿<UserControl x:Class="GasCompanyApp.PaymentsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Width="Auto" Height="Auto" 
+             HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Заголовок и фильтры -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="10">
+            <Label Content="Платежи" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/>
+
+            <DatePicker x:Name="dpStartDate" Width="120" Margin="10,0" VerticalAlignment="Center"
+                        SelectedDateFormat="Short"/>
+            <Label Content="по" VerticalAlignment="Center"/>
+            <DatePicker x:Name="dpEndDate" Width="120" Margin="5,0" VerticalAlignment="Center"
+                        SelectedDateFormat="Short"/>
+
+            <ComboBox x:Name="cmbPaymentMethod" Width="150" Margin="10,0" VerticalAlignment="Center"
+                      DisplayMemberPath="Key" SelectedValuePath="Value"/>
+
+            <Button Content="Фильтр" Width="80" Margin="5,0" Click="FilterButton_Click"/>
+            <Button Content="Сброс" Width="80" Margin="5,0" Click="ResetFilterButton_Click"/>
+        </StackPanel>
+
+        <!-- Список платежей -->
+        <DataGrid x:Name="paymentsGrid" Grid.Row="1" Margin="10" AutoGenerateColumns="False"
+                  CanUserAddRows="False" IsReadOnly="True" SelectionMode="Single"
+                  SelectionChanged="paymentsGrid_SelectionChanged">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ID" Binding="{Binding payment_id}" Width="Auto"/>
+                <DataGridTextColumn Header="Номер счета" Binding="{Binding invoice_id}"/>
+                <DataGridTextColumn Header="Дата платежа" Binding="{Binding payment_date, StringFormat=dd.MM.yyyy HH:mm}"/>
+                <DataGridTextColumn Header="Сумма" Binding="{Binding amount, StringFormat=N2}"/>
+                <DataGridTextColumn Header="Способ оплаты" Binding="{Binding payment_method}"/>
+                <DataGridTextColumn Header="Номер квитанции" Binding="{Binding receipt_number}"/>
+                <DataGridTextColumn Header="Оператор" Binding="{Binding OperatorName}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- Кнопки управления -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+            <Button Content="Добавить" Width="100" Margin="5" Click="AddButton_Click"/>
+            <Button Content="Печать квитанции" Width="120" Margin="5" Click="PrintButton_Click"/>
+            <Button Content="Обновить" Width="100" Margin="5" Click="RefreshButton_Click"/>
+        </StackPanel>
+
+        <!-- Форма добавления платежа -->
+        <Border x:Name="editForm" Grid.Row="1" Grid.RowSpan="2" Background="#CC000000"
+                Visibility="Collapsed" Margin="10">
+            <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Background="White"
+                  Width="500" Margin="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Label Content="Добавление платежа" Grid.Row="0" FontSize="16" FontWeight="Bold"
+                       HorizontalAlignment="Center" Margin="0,0,0,10"/>
+
+                <Label Content="Счет:" Grid.Row="1"/>
+                <ComboBox x:Name="cmbInvoices" Grid.Row="2" Margin="0,0,0,5" DisplayMemberPath="InvoiceInfo"/>
+
+                <Label Content="Сумма платежа:" Grid.Row="3"/>
+                <TextBox x:Name="txtAmount" Grid.Row="4" Margin="0,0,0,5"/>
+
+                <Label Content="Способ оплаты:" Grid.Row="5"/>
+                <ComboBox x:Name="cmbPaymentMethods" Grid.Row="6" Margin="0,0,0,5"/>
+
+                <Label Content="Номер квитанции:" Grid.Row="7" x:Name="lblReceiptNumber"/>
+                <TextBox x:Name="txtReceiptNumber" Grid.Row="8" Margin="0,0,0,10"/>
+
+                <StackPanel Grid.Row="9" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Content="Сохранить" Width="100" Margin="5" Click="SaveButton_Click"/>
+                    <Button Content="Отмена" Width="100" Margin="5" Click="CancelButton_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
